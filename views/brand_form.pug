@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    h1= title
+    form(method="post" enctype="multipart/form-data" action="")
+        label(for="brand-logo") Brand logo:
+        input#brand-name(type="file" name="logo" value=(logo !== undefined ? logo : ""))
+        label(for="brand-name") Brand name:
+        input#brand-name(name="name" value=(name !== undefined ? name : ""))
+        button(type="submit") Create brand
+    if errors
+        ul
+            for error in errors
+                li= error
