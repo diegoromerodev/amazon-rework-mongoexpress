@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    #brands
+        for brand in brands
+            .brand
+                img(src=("uploads/" + (brand.logo || "default.png")))
+                h4=brand.name

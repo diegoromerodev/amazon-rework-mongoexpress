@@ -1,5 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const multer = require("multer");
+const path = require("path");
 const Brand = require("../models/brand");
 
 const storage = multer.diskStorage({
@@ -27,10 +28,12 @@ const upload = multer({
   },
 }).single("logo");
 
+// CREATE BRAND GET
 exports.brand_create_get = (req, res) => {
   res.render("brand_form", { title: "Add a new brand" });
 };
 
+// CREATE BRAND POST
 exports.brand_create_post = [
   (req, res, next) => {
     upload(req, res, function catchError(err) {
@@ -56,7 +59,10 @@ exports.brand_create_post = [
       return;
     }
     // NO ERRORS DURING VALIDATION
-    const newBrand = new Brand({ name, path: req.file.path });
+    const newBrand = new Brand({
+      name,
+      logo: req.file.filename,
+    });
     Brand.findOne({ name: { $regex: new RegExp(newBrand.name, "i") } }).exec(
       (errors, result) => {
         if (result) {
@@ -73,3 +79,15 @@ exports.brand_create_post = [
     );
   },
 ];
+
+exports.brands_showcase = (req, res, next) => {
+  Brand.find().exec((err, brands) => {
+    if (err) {
+      return next(err);
+    }
+    if (!brands) {
+      return next(new Error(404));
+    }
+    return res.render("brands_showcase", { title: "Amazon Brands", brands });
+  });
+};

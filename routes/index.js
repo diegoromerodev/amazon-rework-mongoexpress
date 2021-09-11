@@ -1,4 +1,5 @@
 const express = require("express");
+const brandController = require("../controllers/brandController");
 
 const router = express.Router();
 
@@ -11,9 +12,7 @@ router.get("/categories", (req, res) => {
   res.send(`NOT IMPLEMENTED CAT SHOWCASE`);
 });
 
-router.get("/brands", (req, res) => {
-  res.send(`NOT IMPLEMENTED BRANDS SHOWCASE`);
-});
+router.get("/brands", brandController.brands_showcase);
 
 router.get("/create", (req, res) => {
   res.send(`NOT IMPLEMENTED PRODUCT CREATE GET`);
