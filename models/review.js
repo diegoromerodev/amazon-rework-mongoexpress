@@ -5,8 +5,9 @@ const { Schema } = mongoose;
 
 const ReviewSchema = new Schema({
   product: { type: Schema.Types.ObjectId, ref: "Product" },
+  image: String,
   review_date: Date,
-  stars: Number,
+  rating: Number,
   author: String,
   text: String,
 });

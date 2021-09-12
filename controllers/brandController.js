@@ -1,11 +1,10 @@
 const { body, validationResult } = require("express-validator");
 const multer = require("multer");
-const path = require("path");
 const Brand = require("../models/brand");
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    const path = `./public/uploads`;
+    const path = `./public/uploads/logos`;
     cb(null, path);
   },
   filename(req, file, cb) {
@@ -14,6 +13,7 @@ const storage = multer.diskStorage({
 });
 
 function checkImgErrors(req, file, cb) {
+  console.log(file);
   if (!file.mimetype.match(/^image/)) {
     cb(new Error("Only images allowed."));
   }
@@ -37,6 +37,9 @@ exports.brand_create_get = (req, res) => {
 exports.brand_create_post = [
   (req, res, next) => {
     upload(req, res, function catchError(err) {
+      if (!req.file) {
+        return next([new Error("Logo is required")]);
+      }
       if (!err) {
         return next([]);
       }
@@ -64,12 +67,13 @@ exports.brand_create_post = [
       logo: req.file.filename,
     });
     Brand.findOne({ name: { $regex: new RegExp(newBrand.name, "i") } }).exec(
-      (errors, result) => {
-        if (result) {
-          res.redirect(`/brand/${result._id}`);
-          return;
+      (errors, brandDuplicate) => {
+        if (errors) return next(errors);
+        if (brandDuplicate) {
+          return res.redirect(`/brand/${brandDuplicate.name.toLowerCase()}`);
         }
-        newBrand.save((error) => {
+        // NO DUPES
+        return newBrand.save((error) => {
           if (error) {
             return next(error);
           }

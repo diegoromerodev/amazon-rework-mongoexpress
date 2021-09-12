@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    h1= title + product.name
+    .product
+        h3= product.name
+        p= product._id
+    form(method="post" enctype="multipart/form-data" action="")
+        input#review-image(type="hidden" name="review-product" value=product._id)
+        label(for="review-image") Rating:
+        input#review-rating(type="range" name="rating" min="0" max="5" value=(newReview !== undefined ? newReview.rating : "") step="0.5")
+        label(for="review-image") Review image:
+        input#review-image(type="file" name="image" value="")
+        label(for="review-author") Author:
+        input#review-author(name="author" value=(newReview !== undefined ? newReview.author : ""))
+        label(for="review-text") Message:
+        input#review-text(name="text" value=(newReview !== undefined ? newReview.text : ""))
+        button(type="submit") Save review
+    if errors
+        ul
+            for error in errors
+                li= (error.msg || error)

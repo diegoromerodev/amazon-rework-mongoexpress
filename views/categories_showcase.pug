@@ -1,0 +1,7 @@
+extends layout
+
+block content
+    #categories
+        for category in categories
+            .category
+                h2= category.name

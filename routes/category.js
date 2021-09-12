@@ -1,14 +1,11 @@
 const express = require("express");
+const categoryController = require("../controllers/categoryController");
 
 const router = express.Router();
 
-router.get("/create", (req, res) => {
-  res.send(`NOT IMPLEMENTED CATEGORY CREATE GET`);
-});
+router.get("/create", categoryController.category_create_get);
 
-router.post("/create", (req, res) => {
-  res.send(`NOT IMPLEMENTED CATEGORY CREATE POST`);
-});
+router.post("/create", categoryController.category_create_post);
 
 router.get("/:catid", (req, res) => {
   res.send(`NOT IMPLEMENTED CATEGORY DETAILS ID: ${req.params.catid}`);

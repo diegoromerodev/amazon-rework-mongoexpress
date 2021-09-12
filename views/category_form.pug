@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1= title
+    form(action="" method="post")
+        label(for="cat-name") Category name
+        input#cat-name(name="name" value=(name || ""))
+        button(type="submit") Save category
+    if errors
+        ul
+            for error in errors
+                li= (error.msg || error)
