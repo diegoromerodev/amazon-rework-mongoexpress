@@ -5,12 +5,15 @@ html
     link(rel="stylesheet", href="/stylesheets/style.css")
   body
     #nav-bar
-        img(src="/images/amz-logo.svg" alt="Amazon's logo")
+        a(href="/")
+            img(src="/images/amz-logo.svg" alt="Amazon's logo")
         form.nav-search(action="/search")
             input(type="text" name="query")
             button(type="submit")
-                | SEARCH
-        .cart
+                img(src="images/magnifying-glass.svg" alt="Search")
+        .language.hover
+            img(src="images/united-states.svg")
+        .cart.hover
             img(src="data:image/svg+xml;base64,PHN2ZyBpZD0iQm9sZCIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTkuMDkxIDE5aC04Ljk5NGMtMS4yOTcgMC0yLjQ0Ny0uODUxLTIuNzk4LTIuMDdsLTMuMDQtMTAuMzAxYy0uMTA4LS4zNzMtLjQ2Ny0uNjI5LS44NzctLjYyOWgtMi4zODJjLS41NTMgMC0xLS40NDgtMS0xcy40NDctMSAxLTFoMi4zODJjMS4yOTcgMCAyLjQ0Ni44NTEgMi43OTcgMi4wN2wuNTY5IDEuOTNoMTUuMjk1Yy42MjQgMCAxLjIxNi4yOTcgMS41ODMuNzk1LjM2NC40OTQuNDY5IDEuMTEyLjI4OCAxLjY5NmwtMi4wNjMgNi41NDhjLS40MDQgMS4xODItMS41MTEgMS45NjEtMi43NiAxLjk2MXptMi45NTMtOWguMDF6Ii8+PHBhdGggZD0ibTExIDI0Yy0xLjEwMyAwLTItLjg5Ny0yLTJzLjg5Ny0yIDItMiAyIC44OTcgMiAyLS44OTcgMi0yIDJ6bTAtMi4wMDF2LjAwMXoiLz48cGF0aCBkPSJtMTggMjRjLTEuMTAzIDAtMi0uODk3LTItMnMuODk3LTIgMi0yIDIgLjg5NyAyIDItLjg5NyAyLTIgMnptMC0yLjAwMXYuMDAxeiIvPjwvc3ZnPg==")
             p 
              strong Cart

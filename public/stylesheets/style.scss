@@ -2,6 +2,8 @@
 
 $dark: #333;
 $light: #fafafa;
+$btn-off: rgba(#111, 0.2);
+$btn-on: rgba(#fafafa, 0.2);
 
 *, *::before, *::after {
     border: none;
@@ -29,28 +31,73 @@ body {
     background-color: $dark;
     justify-content: space-between;
     padding: 10px 40px;
-    & > img {
-        margin-right: 40px;
-        width: 150px;
+    a {
+        display: flex;
+        align-items: center;
+        img {
+            width: 150px;
+        }
     }
     form {
         flex: 1 1;
         display: flex;
+        margin: 0 20px;
+        border-radius: 5px;
+        overflow: hidden;
         input {
+            background: rgba($light, 0.85);
             flex: 1 1;
             height: 100%;
+            padding: 0 10px;
+            font-size: 1.2em;
+            font-family: Karla, sans-serif;
+            font-style: italic;
+            transition: all 0.3s ease-out;
+            &:hover, &:focus {
+                background: rgba($light, 1);
+            }
+        }
+        button {
+            background: linear-gradient(-180deg, #f5ae7f, #ff7037);
+            box-shadow: -5px 0 20px #ffaa5a;
+        }
+        img {
+            width: 20px;
+            opacity: 0.6;
+            margin: 0 15px
         }
     }
 }
 
 .cart {
     display: flex;
-    height: 100%;
     align-items: flex-end;
     color: $light;
+    padding: 6px 12px;
+    height: 100%;
     img {
         height: 40px;
         display: block;
         filter: invert(100%);
+        margin-top: -5px;
+    }
+    
+}
+
+.language {
+    background-color: red;
+    width: 30px;
+    display: flex;
+    margin-right: 10px;
+    padding: 0 12px;
+}
+
+.hover {
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: $btn-off;
+    transition: all 0.3s ease-out;
+    &:hover {
+        background-color: $btn-on;
     }
 }
