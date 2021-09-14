@@ -1,5 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,400;0,500;1,400;1,500&family=Syne:wght@600&display=swap");
+*, *::before, *::after {
+  border: none;
+  margin: 0;
+  padding: 0;
+  outline: none; }
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
+  font-family: Karla, sans-serif; }
+
+h1 {
+  font-family: Syne, monospace; }
+
+h2 {
+  font-family: Syne, monospace; }
+
+h3 {
+  font-family: Syne, monospace; }
+
+h4 {
+  font-family: Syne, monospace; }
+
+h5 {
+  font-family: Syne, monospace; }
+
+h6 {
+  font-family: Syne, monospace; }
+
+#nav-bar {
+  display: flex;
+  background-color: #333;
+  justify-content: space-between;
+  padding: 10px 40px; }
+  #nav-bar > img {
+    margin-right: 40px;
+    width: 150px; }
+  #nav-bar form {
+    flex: 1 1;
+    display: flex; }
+    #nav-bar form input {
+      flex: 1 1;
+      height: 100%; }
+
+.cart {
+  display: flex;
+  height: 100%;
+  align-items: flex-end;
+  color: #fafafa; }
+  .cart img {
+    height: 40px;
+    display: block;
+    filter: invert(100%); }
 
 /*# sourceMappingURL=style.css.map */

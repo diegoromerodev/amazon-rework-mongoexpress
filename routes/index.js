@@ -2,6 +2,7 @@ const express = require("express");
 const brandController = require("../controllers/brandController");
 const categoryController = require("../controllers/categoryController");
 const reviewController = require("../controllers/reviewController");
+const productController = require("../controllers/productController");
 
 const router = express.Router();
 
@@ -14,13 +15,9 @@ router.get("/categories", categoryController.categories_showcase);
 
 router.get("/brands", brandController.brands_showcase);
 
-router.get("/create", (req, res) => {
-  res.send(`NOT IMPLEMENTED PRODUCT CREATE GET`);
-});
+router.get("/create", productController.product_create_get);
 
-router.post("/create", (req, res) => {
-  res.send(`NOT IMPLEMENTED PRODUCT CREATE POST`);
-});
+router.post("/create", productController.product_create_post);
 
 router.get("/:prodid", (req, res) => {
   res.send(`NOT IMPLEMENTED PRODUCT DETAILS ID: ${req.params.prodid}`);

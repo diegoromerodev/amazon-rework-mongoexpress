@@ -5,11 +5,11 @@ const { Schema } = mongoose;
 
 const ProductSchema = new Schema({
   publish_date: Date,
+  image: String,
   name: String,
   description: String,
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   price: Number,
-  review: { type: Schema.Types.ObjectId, ref: "Review" },
   brand: { type: Schema.Types.ObjectId, ref: "Brand" },
 });
 

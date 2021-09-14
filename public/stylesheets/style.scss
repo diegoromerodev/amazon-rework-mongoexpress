@@ -1,4 +1,56 @@
+// COLORS \\
+
+$dark: #333;
+$light: #fafafa;
+
+*, *::before, *::after {
+    border: none;
+    margin: 0;
+    padding: 0;
+    outline: none;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,400;0,500;1,400;1,500&family=Syne:wght@600&display=swap');
+
 body {
-    padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font-family: Karla, sans-serif;
+}
+
+@each $num in 1, 2, 3, 4, 5, 6 {
+    h#{$num} {
+       font-family: Syne, monospace; 
+    }
+}
+
+// NAV BAR \\
+
+#nav-bar {
+    display: flex;
+    background-color: $dark;
+    justify-content: space-between;
+    padding: 10px 40px;
+    & > img {
+        margin-right: 40px;
+        width: 150px;
+    }
+    form {
+        flex: 1 1;
+        display: flex;
+        input {
+            flex: 1 1;
+            height: 100%;
+        }
+    }
+}
+
+.cart {
+    display: flex;
+    height: 100%;
+    align-items: flex-end;
+    color: $light;
+    img {
+        height: 40px;
+        display: block;
+        filter: invert(100%);
+    }
 }

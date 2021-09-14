@@ -3,7 +3,6 @@ const multer = require("multer");
 const async = require("async");
 const Review = require("../models/review");
 const Product = require("../models/product");
-const product = require("../models/product");
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {

@@ -27,7 +27,7 @@ exports.category_create_post = [
         return res.redirect(`/category/${catDuplicate.name.toLowerCase()}`);
       // NO DUPES
       const newCat = new Category({ name: req.body.name });
-      return newCat.save((error) => {
+      newCat.save((error) => {
         if (error) return next(error);
         return res.redirect("/categories");
       });

@@ -1,13 +1,13 @@
 const { body, checkSchema, validationResult } = require("express-validator");
 const multer = require("multer");
 const async = require("async");
-const Review = require("../models/review");
 const Product = require("../models/product");
-const product = require("../models/product");
+const Category = require("../models/category");
+const Brand = require("../models/brand");
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    const path = `./public/uploads/reviews`;
+    const path = `./public/uploads/products`;
     cb(null, path);
   },
   filename(req, file, cb) {
@@ -30,74 +30,82 @@ const upload = multer({
   },
 });
 
-// CREATE REVIEW GET
-exports.review_create_get = (req, res, next) => {
-  Product.findById(req.params.prodid).exec((err, prodData) => {
-    if (err) return next(err);
-    if (!prodData) return next(404);
-    // PRODUCT FOUND AND NO ERRORS
-    return res.render("review_form", {
-      title: "Add a new review for ",
-      product: prodData,
-    });
-  });
+// CREATE PRODUCT GET
+exports.product_create_get = (req, res, next) => {
+  async
+    .parallel({
+      allBrands: (callback) => Brand.find().exec(callback),
+      allCats: (callback) => Category.find().exec(callback),
+    })
+    .then((results) => {
+      res.render("product_form", {
+        title: "Add a new product",
+        brands: results.allBrands,
+        categories: results.allCats,
+      });
+    })
+    .catch((err) => next(err));
 };
 
-exports.review_create_post = [
+exports.product_create_post = [
   upload.single("image"),
   // VALIDATION CHECKS
-  body("author", "Author name is required")
+  body("name", "Product name is required").trim().notEmpty().escape(),
+  body("description", "Product description is mandatory")
     .trim()
-    .isLength({ min: 1 })
+    .notEmpty()
     .escape(),
-  body("text", "Message text is mandatory").trim().notEmpty().escape(),
-  body("rating", "Please specify a rating").trim().notEmpty().escape(),
+  body("price", "Please specify product price").trim().notEmpty().escape(),
+  body("brand", "Please select a brand").trim().notEmpty().escape(),
+  body("category", "Please select a product category")
+    .trim()
+    .notEmpty()
+    .escape(),
   checkSchema({
     image: {
       custom: {
         options: (value, { req }) => !!req.file,
-        errorMessage: "You need to upload an image (jpg, png, gif) < 5MB",
+        errorMessage:
+          "You need to upload a product image (jpg, png, gif) < 5MB",
       },
     },
   }),
   // PROCESSING MIDDLEWARE
   (req, res, next) => {
-    return async
+    console.log(req.body);
+    async
       .parallel({
-        product: (callback) => {
-          Product.findById(req.body["review-product"]).exec(callback);
-        },
-        reviewDuplicate: (callback) => {
-          Review.findOne({
-            author: { $regex: new RegExp(req.body.author, "i") },
-          }).exec(callback);
-        },
+        category: (callback) =>
+          Category.findById(req.body.category).exec(callback),
+        brand: (callback) => Brand.findById(req.body.brand).exec(callback),
+        allBrands: (callback) => Brand.find().exec(callback),
+        allCats: (callback) => Category.find().exec(callback),
       })
       .then((results) => {
-        if (!results.product) return next(new Error(404));
-        if (results.reviewDuplicate) return res.redirect(results.product.url);
-        // NO DUPES OR ERRORS
-        const newReview = new Review({
-          product: results.product,
-          rating: req.body.rating,
-          author: req.body.author,
-          text: req.body.text,
+        const newProduct = new Product({
+          publish_date: Date.now(),
+          name: req.body.name,
+          description: req.body.description,
+          price: req.body.price,
           image: req.file?.filename,
+          category: results.category,
+          brand: results.brand,
         });
         const valErrors = validationResult(req);
-        if (!valErrors.isEmpty()) {
-          return res.render("review_form", {
-            title: "Add a new review for ",
+        if (!valErrors.isEmpty() || !results.brand || !results.category) {
+          return res.render("product_form", {
+            title: "Add a new product",
             errors: valErrors.array().concat([]),
-            product: results.product,
-            newReview,
+            brands: results.allBrands,
+            categories: results.allCats,
+            product: newProduct,
           });
         }
-        return newReview.save((error) => {
+        return newProduct.save((error) => {
           if (error) {
             return next(error);
           }
-          return res.redirect(newReview.product.url);
+          return res.redirect(newProduct.url);
         });
       })
       .catch((err) => next(err));
