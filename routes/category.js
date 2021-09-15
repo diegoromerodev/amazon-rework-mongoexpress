@@ -7,9 +7,7 @@ router.get("/create", categoryController.category_create_get);
 
 router.post("/create", categoryController.category_create_post);
 
-router.get("/:catid", (req, res) => {
-  res.send(`NOT IMPLEMENTED CATEGORY DETAILS ID: ${req.params.catid}`);
-});
+router.get("/:catid", categoryController.category_details);
 
 router.get("/:catid/update", (req, res) => {
   res.send(`NOT IMPLEMENTED CATEGORY UPDATE GET ID: ${req.params.catid}`);

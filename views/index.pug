@@ -1,4 +1,32 @@
 extends layout
 
 block content
-  h1= 'AMAZON HOME PAGE'
+    h1.page-title WORLD'S LARGEST BRAND CATALOG
+    .container
+        .brands-car
+            img(src="images/abstract.jpg")
+            for brand in brands
+                a.brand-car-el(href=brand.url)
+                    img(src="uploads/logos/" + brand.logo)
+            for brand in brands
+                a.brand-car-el(href=brand.url)
+                    img(src="uploads/logos/" + brand.logo)
+        .categories
+            a.category-index.fashion(href="/category/fashion")
+                h2 FASHION
+            a.category-index.pets(href="/category/pets")
+                h2 PETS
+            a.category-index.streetwear(href="/category/streetwear")
+                h2 STREETWEAR
+        .product-grid
+            for prod in products
+                a.prod-grid-item(href=prod.url)
+                    img(src="uploads/products/" + prod.image)
+                    p= prod.brand.name
+                    if prod.name.length > 30
+                        h2= prod.name.substr(0, 28) + "…"
+                    else
+                        h2= prod.name
+                    p= prod.price.split(".")[0]
+                        small
+                            sup= prod.price.split(".")[1]

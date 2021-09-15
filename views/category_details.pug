@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    .container
+        .detail-header
+            h1= category.name
+        .product-grid
+            for prod in products
+                a.prod-grid-item(href=prod.url)
+                    img(src="/uploads/products/" + prod.image)
+                    p= prod.brand.name
+                    if prod.name.length > 30
+                        h2= prod.name.substr(0, 28) + "…"
+                    else
+                        h2= prod.name
+                    p= prod.price.split(".")[0]
+                        small
+                            sup= prod.price.split(".")[1]

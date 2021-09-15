@@ -9,7 +9,7 @@ const ProductSchema = new Schema({
   name: String,
   description: String,
   category: { type: Schema.Types.ObjectId, ref: "Category" },
-  price: Number,
+  price: String,
   brand: { type: Schema.Types.ObjectId, ref: "Brand" },
 });
 

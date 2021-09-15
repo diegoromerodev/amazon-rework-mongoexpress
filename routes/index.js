@@ -7,9 +7,7 @@ const productController = require("../controllers/productController");
 const router = express.Router();
 
 /* GET home page. */
-router.get("/", (req, res) => {
-  res.render("index");
-});
+router.get("/", require("../controllers/indexController").index_get);
 
 router.get("/categories", categoryController.categories_showcase);
 

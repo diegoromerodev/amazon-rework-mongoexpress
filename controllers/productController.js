@@ -1,6 +1,7 @@
 const { body, checkSchema, validationResult } = require("express-validator");
 const multer = require("multer");
 const async = require("async");
+const currencyFormatter = require("currency-formatter");
 const Product = require("../models/product");
 const Category = require("../models/category");
 const Brand = require("../models/brand");
@@ -72,7 +73,6 @@ exports.product_create_post = [
   }),
   // PROCESSING MIDDLEWARE
   (req, res, next) => {
-    console.log(req.body);
     async
       .parallel({
         category: (callback) =>
@@ -86,7 +86,9 @@ exports.product_create_post = [
           publish_date: Date.now(),
           name: req.body.name,
           description: req.body.description,
-          price: req.body.price,
+          price: currencyFormatter.format(parseFloat(req.body.price), {
+            code: "USD",
+          }),
           image: req.file?.filename,
           category: results.category,
           brand: results.brand,

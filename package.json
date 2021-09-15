@@ -10,6 +10,7 @@
   "dependencies": {
     "async": "^3.2.1",
     "cookie-parser": "~1.4.4",
+    "currency-formatter": "^1.5.8",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-validator": "^6.12.1",

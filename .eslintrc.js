@@ -8,7 +8,6 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
-  plugins: ["pug"],
   rules: {
     "no-underscore-dangle": [2, { allow: ["_id"] }],
   },

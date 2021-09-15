@@ -1,6 +1,9 @@
 const { body, validationResult } = require("express-validator");
 const multer = require("multer");
+const async = require("async");
 const Brand = require("../models/brand");
+const Category = require("../models/category");
+const Product = require("../models/product");
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -94,4 +97,37 @@ exports.brands_showcase = (req, res, next) => {
     }
     return res.render("brands_showcase", { title: "Amazon Brands", brands });
   });
+};
+
+exports.brand_details = (req, res, next) => {
+  const brandName = req.params.brandid;
+  async.series(
+    {
+      brand(callback) {
+        Brand.findOne({
+          name: { $regex: new RegExp(brandName, "i") },
+        }).exec(callback);
+      },
+      categories(callback) {
+        Category.find().exec(callback);
+      },
+    },
+    (err, { brand, categories }) => {
+      if (err) return next(err);
+      if (!brand) return next(404);
+      if (!categories) return next(404);
+      Product.find()
+        .where("brand")
+        .equals(brand._id)
+        .exec((error, products) => {
+          if (error) return next(error);
+          res.render("brand_details", {
+            title: brandName,
+            brand,
+            categories,
+            products,
+          });
+        });
+    }
+  );
 };

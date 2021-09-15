@@ -7,9 +7,7 @@ router.get("/create", brandController.brand_create_get);
 
 router.post("/create", brandController.brand_create_post);
 
-router.get("/:brandid", (req, res) => {
-  res.send(`NOT IMPLEMENTED BRAND DETAILS ID: ${req.params.brandid}`);
-});
+router.get("/:brandid", brandController.brand_details);
 
 router.get("/:brandid/update", (req, res) => {
   res.send(`NOT IMPLEMENTED BRAND UPDATE GET ID: ${req.params.brandid}`);
