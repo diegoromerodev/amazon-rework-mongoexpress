@@ -1,7 +1,10 @@
 extends layout
 
 block content
-    #categories
-        for category in categories
-            .category
-                h2= category.name
+    .container
+        .it-grid
+            h1 Categories
+            for category in categories
+                a.item.prod-grid-item(href=category.url)
+                    img.absol(src="https://source.unsplash.com/900x900/?"+category.name)
+                    h3=category.name

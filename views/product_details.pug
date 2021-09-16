@@ -1,0 +1,35 @@
+extends layout
+
+block content
+    .container
+        .product-detail
+            img(src="/uploads/products/" + product.image)
+            .product-info
+                a(href=product.brand.url) 
+                    img(src="/uploads/logos/" + product.brand.logo)
+                h1= product.name
+                .buy-buttons
+                    h3= product.price
+                    h3.stock Out of stock
+                .actions
+                    a(href="/create")
+                        img(src="/images/plus.svg")
+                    a.edit(href=product.url + "/update")
+                        img(src="/images/edit.svg")
+                    a.delete(href=product.url + "/delete")
+                        img(src="/images/trash.svg")
+                h4 Description
+                p= product.description
+        h2 Check out these other products:
+        .product-grid
+            for prod in products
+                a.prod-grid-item(href=prod.url)
+                    img(src="/uploads/products/" + prod.image)
+                    p= prod.brand.name
+                    if prod.name.length > 30
+                        h2= prod.name.substr(0, 28) + "…"
+                    else
+                        h2= prod.name
+                    p= prod.price.split(".")[0]
+                        small
+                            sup= prod.price.split(".")[1]

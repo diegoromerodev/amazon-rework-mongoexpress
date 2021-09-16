@@ -113,3 +113,31 @@ exports.product_create_post = [
       .catch((err) => next(err));
   },
 ];
+
+exports.product_details_get = (req, res, next) => {
+  async
+    .parallel({
+      product: (callback) =>
+        Product.findById(req.params.prodid).populate("brand").exec(callback),
+      categories: (callback) => Category.find().exec(callback),
+      allProds: (callback) => Product.find().exec(callback),
+    })
+    .then((results) => {
+      if (!results) next(404);
+      const randomProds = [];
+      for (let i = 0; i < 5; ) {
+        const item =
+          results.allProds[Math.floor(Math.random() * results.allProds.length)];
+        if (randomProds.includes(item)) continue;
+        randomProds.push(item);
+        i++;
+      }
+      res.render("product_details", {
+        title: results.product.name,
+        product: results.product,
+        categories: results.categories,
+        products: randomProds,
+      });
+    })
+    .catch((err) => next(err));
+};

@@ -2,6 +2,13 @@ extends layout
 
 block content
     .container
+        .actions
+            a(href="/brand/create")
+                img(src="/images/plus.svg")
+            a.edit(href=brand.url + "/update")
+                img(src="/images/edit.svg")
+            a.delete(href=brand.url + "/delete")
+                img(src="/images/trash.svg")
         .detail-header
             h1= brand.name
             img(src="/uploads/logos/" + brand.logo)

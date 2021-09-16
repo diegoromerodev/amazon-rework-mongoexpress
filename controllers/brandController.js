@@ -88,15 +88,29 @@ exports.brand_create_post = [
 ];
 
 exports.brands_showcase = (req, res, next) => {
-  Brand.find().exec((err, brands) => {
-    if (err) {
-      return next(err);
+  async.parallel(
+    {
+      brands(callback) {
+        Brand.find().exec(callback);
+      },
+      categories(callback) {
+        Category.find().exec(callback);
+      },
+    },
+    (err, { categories, brands }) => {
+      if (err) {
+        return next(err);
+      }
+      if (!brands) {
+        return next(new Error(404));
+      }
+      return res.render("brands_showcase", {
+        title: "Amazon Brands",
+        brands,
+        categories,
+      });
     }
-    if (!brands) {
-      return next(new Error(404));
-    }
-    return res.render("brands_showcase", { title: "Amazon Brands", brands });
-  });
+  );
 };
 
 exports.brand_details = (req, res, next) => {

@@ -20,6 +20,10 @@ body {
     font-family: Karla, sans-serif;
 }
 
+a {
+    color: $dark;
+}
+
 @each $num in 1, 2, 3, 4, 5, 6 {
     h#{$num} {
        font-family: Syne, monospace; 
@@ -200,12 +204,13 @@ body {
     border-radius: 5px;
     box-shadow: 0 0 20px $btn-off;
     margin: 0 2%;
-    animation: block 30s linear infinite;
+    animation: block 20s linear infinite;
     background-color: rgba(#fafafa, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 2s ease-out;
+    transform: translate(0);
     img {
         width: 65%;
         height: 65%;
@@ -220,7 +225,7 @@ body {
         transform: translate(0);
     }
     100% {
-        transform: translate(-750%);
+        transform: translate(-625%);
     }
 }
 
@@ -236,11 +241,11 @@ body {
     gap: 20px;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 1fr;
+    &.index .prod-grid-item:first-child {
+        grid-column-end: span 2;
+    }
 }
 
-.prod-grid-item.span-2 {
-    grid-column-end: span 2;
-}
 
 .prod-grid-item {
     display: flex;
@@ -312,12 +317,14 @@ body {
     padding: 20px;
     background: $dark;
     position: relative;
-    h1 {
+    overflow: hidden;
+    h1, h3 {
         z-index: 1;
         position: relative;
         color: $light;
         font-weight: 800;
         text-transform: uppercase;
+        text-shadow: 0 0 20px rgba(#333, 0.7);
     }
     img {
         position: absolute;
@@ -327,3 +334,180 @@ body {
         opacity: 0.3;
     }
 }
+
+// SEARCH RESULTS \\
+.four-oh {
+    margin-top: 40vh;
+    text-align: center;
+}
+.search-head {
+    margin-top: 20px;
+}
+
+a.detail-header {
+    transform: scale(100%);
+    transition: all 0.5s ease-out;
+    text-align: center;
+    h3 {
+        transition: all 0.1s ease-out;
+    }
+    &:hover, &:hover h3 {
+        transform: scale(102%);
+    }
+}
+
+.detail-header.search {
+    background-color: $mild;
+}
+
+.flex-search {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    & > * {
+        flex: 1 1;
+        flex-wrap: wrap;
+    }
+    a {
+        color: $dark;
+    }
+}
+
+// PRODUCT DETAILS \\
+.product-detail {
+    display: grid;
+    place-content: center;
+    place-items: center;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    background: $mild;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    h1 {
+        font-weight: 800;
+    }
+    h3 {
+        background: $dark;
+        font-size: 1.5em;
+        padding: 10px;
+        border-radius: 5px;
+        color: $light;
+        display: inline-block;
+        margin: 10px 0;
+        margin-right: 10px;
+    }
+    .stock {
+        margin-right: 0;
+        background: $btn-off;
+    }
+    &>img {
+        grid-row-end: span 3;
+        width: 100%;
+    }
+}
+
+.detail-header img.detail {
+    position: absolute;
+    filter: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    left: 0;
+}
+
+.product-info {
+    flex-grow: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 40px;
+    img {
+        height: 2rem;
+    }
+}
+
+.product-detail + h2 {
+    margin-top: 20px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        border-radius: 50%;
+        height: 1.5em;
+        width: 1.5em;
+        background: linear-gradient(-180deg, #3aeb22, #07cc07);
+        box-shadow: 0 0 10px #3aeb22;
+        &.edit {
+            background: linear-gradient(-180deg, #81a9ff, #4393fc);
+            box-shadow: 0 0 10px #81a9ff;
+        }
+        &.delete {
+            background: linear-gradient(-180deg, #f83535, #db0505);
+            box-shadow: 0 0 10px #f83535;
+        }
+    }
+    img {
+        width: 1.4em;
+        height: 1.4em;
+        object-fit: contain;
+        opacity: 0.6;
+    }
+}
+
+// BRANDS SHOWCASE \\
+.it-grid {
+    display: grid;
+    max-width: 100%;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    grid-auto-rows: 1fr;
+    gap: 20px;
+    h1 {
+        grid-column: 1 / -1;
+        font-weight: 800;
+        margin-top: 20px;
+    }
+    h3 {
+        position: relative;
+        z-index: 1;
+        font-weight: 700;
+        color: $light;
+        text-shadow: 0 0 10px $btn-off;
+    }
+    .item {
+        background-color: $mild;
+        border-radius: 5px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+        img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+        .absol {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            top: 0;
+            z-index: 0;
+        }
+    }
+}
+
+// FORMS \\

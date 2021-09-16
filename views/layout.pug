@@ -1,14 +1,14 @@
 doctype html
 html
   head
-    title= title + " - Amazon.com"
+    title= title + " - Amazon.com  "
     link(rel="stylesheet", href="/stylesheets/style.css")
   body
     #nav-bar
         a(href="/")
             img(src="/images/amz-logo.svg" alt="Amazon's logo")
         form.nav-search(action="/search")
-            input(type="text" name="query")
+            input(type="text" name="query" placeholder="Search everything...")
             button(type="submit")
                 img(src="/images/magnifying-glass.svg" alt="Search")
         .menu-item.invert.hover#ham-button
@@ -24,7 +24,13 @@ html
             li.cat-head
                 h3 CATEGORIES
                 img(src="/images/cancel.svg")
-            for cat in categories.slice(0, 10)
+            li.cat-item
+                a(href="/categories") 
+                    strong All Categories
+            li.cat-item
+                a(href="/brands")
+                    strong All Brands
+            for cat in categories.slice(0, 8)
                 li.cat-item
                     a(href=cat.url)= cat.name.toUpperCase()
     block content

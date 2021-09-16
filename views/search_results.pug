@@ -1,0 +1,32 @@
+extends layout
+
+block content
+    .container
+        if !brandResults.length && !categoryResults.length && !productResults.length
+            h2.four-oh Sorry, we found nothing... :(<br>Try a different term.
+        if brandResults.length
+            h2.search-head Brands
+            for brand in brandResults
+                a.detail-header(href=brand.url)
+                    h3= brand.name
+                    img(src="/uploads/logos/" + brand.logo)
+        if categoryResults.length
+            h2.search-head Categories
+            .flex-search
+                for category in categoryResults
+                    a.detail-header.search(href=category.url)
+                        h4= category.name
+        if productResults.length
+            h2.search-head Products
+            .product-grid
+                for prod in productResults
+                    a.prod-grid-item(href=prod.url)
+                        img(src="/uploads/products/" + prod.image)
+                        p= prod.brand.name
+                        if prod.name.length > 30
+                            h2= prod.name.substr(0, 28) + "…"
+                        else
+                            h2= prod.name
+                        p= prod.price.split(".")[0]
+                            small
+                                sup= prod.price.split(".")[1]

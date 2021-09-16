@@ -1,8 +1,10 @@
 extends layout
 
 block content
-    #brands
-        for brand in brands
-            .brand
-                img(src=("uploads/logos/" + (brand.logo || "default.png")))
-                h4=brand.name
+    .container
+        .it-grid
+            h1 Brand catalog
+            for brand in brands
+                a.item.prod-grid-item(href=brand.url)
+                    img(src=("uploads/logos/" + (brand.logo || "default.png")))
+                    h4=brand.name

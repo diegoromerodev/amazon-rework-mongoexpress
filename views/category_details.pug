@@ -2,7 +2,15 @@ extends layout
 
 block content
     .container
+        .actions
+            a(href="/category/create")
+                img(src="/images/plus.svg")
+            a.edit(href=category.url + "/update")
+                img(src="/images/edit.svg")
+            a.delete(href=category.url + "/delete")
+                img(src="/images/trash.svg")
         .detail-header
+            img.detail(src="https://source.unsplash.com/1280x720/?"+category.name)
             h1= category.name
         .product-grid
             for prod in products

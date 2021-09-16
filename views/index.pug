@@ -11,6 +11,8 @@ block content
             for brand in brands
                 a.brand-car-el(href=brand.url)
                     img(src="uploads/logos/" + brand.logo)
+            a.brand-car-el(href=brands[0].url)
+                img(src="uploads/logos/" + brands[0].logo)
         .categories
             a.category-index.fashion(href="/category/fashion")
                 h2 FASHION
@@ -18,7 +20,7 @@ block content
                 h2 PETS
             a.category-index.streetwear(href="/category/streetwear")
                 h2 STREETWEAR
-        .product-grid
+        .product-grid.index
             for prod in products
                 a.prod-grid-item(href=prod.url)
                     img(src="uploads/products/" + prod.image)

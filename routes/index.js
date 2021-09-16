@@ -9,6 +9,8 @@ const router = express.Router();
 /* GET home page. */
 router.get("/", require("../controllers/indexController").index_get);
 
+router.get("/search", require("../controllers/indexController").search_get);
+
 router.get("/categories", categoryController.categories_showcase);
 
 router.get("/brands", brandController.brands_showcase);
@@ -17,9 +19,7 @@ router.get("/create", productController.product_create_get);
 
 router.post("/create", productController.product_create_post);
 
-router.get("/:prodid", (req, res) => {
-  res.send(`NOT IMPLEMENTED PRODUCT DETAILS ID: ${req.params.prodid}`);
-});
+router.get("/:prodid", productController.product_details_get);
 
 router.get("/:prodid/update", (req, res) => {
   res.send(`NOT IMPLEMENTED PRODUCT UPDATE GET ID: ${req.params.prodid}`);
