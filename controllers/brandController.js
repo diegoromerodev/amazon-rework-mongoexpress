@@ -166,6 +166,7 @@ exports.brand_update_get = (req, res, next) => {
         title: `Edit ${brand.name}`,
         categories,
         name: brand.name,
+        admin: true,
       });
     }
   );
@@ -175,6 +176,7 @@ exports.brand_update_get = (req, res, next) => {
 exports.brand_update_post = [
   upload.single("logo"),
   body("name", "Brand name is required").trim().notEmpty().escape(),
+  body("password", "Wrong password").trim().equals("admin123").escape(),
   checkSchema({
     image: {
       custom: {
@@ -193,6 +195,7 @@ exports.brand_update_post = [
           errors: valErrors.array(),
           name,
           categories,
+          admin: true,
         });
         return;
       }
@@ -234,23 +237,53 @@ exports.brand_delete_get = (req, res, next) => {
   );
 };
 
-exports.brand_delete_post = (req, res, next) => {
-  const brandQuery = Brand.findOne({
-    name: { $regex: new RegExp(`^${req.params.brandid}$`, "i") },
-  });
-  brandQuery.exec((err, result) => {
-    if (err) return next(err);
-    if (!result) return next(404);
-    Product.find()
-      .where("brand")
-      .equals(result._id)
-      .deleteMany({}, (error) => {
-        if (error) return next(error);
-      });
-    brandQuery.clone().deleteOne({}, (lastErr, docs) => {
-      if (lastErr) return next(lastErr);
-      if (!docs) return next(404);
-      res.redirect("/brands");
+exports.brand_delete_post = [
+  body("password", "Wrong password").trim().equals("admin123").escape(),
+  (req, res, next) => {
+    const valErrors = validationResult(req);
+    if (!valErrors.isEmpty()) {
+      async.parallel(
+        {
+          categories(callback) {
+            Category.find().exec(callback);
+          },
+          brand(callback) {
+            Brand.findOne({
+              name: { $regex: new RegExp(`^${req.params.brandid}$`, "i") },
+            }).exec(callback);
+          },
+        },
+        (err, { categories, brand }) => {
+          if (err) return next(err);
+          if (!brand) return next(404);
+          res.render("brand_delete", {
+            title: `Delete ${brand.name}`,
+            brand,
+            categories,
+            errors: valErrors.array(),
+          });
+        }
+      );
+      return;
+    }
+    // NO ERRORS DURING VALIDATION
+    const brandQuery = Brand.findOne({
+      name: { $regex: new RegExp(`^${req.params.brandid}$`, "i") },
     });
-  });
-};
+    brandQuery.exec((err, result) => {
+      if (err) return next(err);
+      if (!result) return next(404);
+      Product.find()
+        .where("brand")
+        .equals(result._id)
+        .deleteMany({}, (error) => {
+          if (error) return next(error);
+        });
+      brandQuery.clone().deleteOne({}, (lastErr, docs) => {
+        if (lastErr) return next(lastErr);
+        if (!docs) return next(404);
+        res.redirect("/brands");
+      });
+    });
+  },
+];

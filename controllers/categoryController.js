@@ -115,6 +115,7 @@ exports.category_update_get = (req, res, next) => {
         title: "Edit category",
         name: category.name,
         categories,
+        admin: true,
       });
     }
   );
@@ -122,6 +123,7 @@ exports.category_update_get = (req, res, next) => {
 
 exports.category_update_post = [
   body("name", "Must specify a category name").trim().notEmpty().escape(),
+  body("password", "Wrong password").trim().equals("admin123").escape(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -133,6 +135,7 @@ exports.category_update_post = [
           name: req.body.name,
           errors: errors.array(),
           categories,
+          admin: true,
         });
       });
       return;
@@ -187,23 +190,52 @@ exports.category_delete_get = (req, res, next) => {
   );
 };
 
-exports.category_delete_post = (req, res, next) => {
-  const categoryQuery = Category.findOne({
-    name: { $regex: new RegExp(`^${req.params.catid}$`, "i") },
-  });
-  categoryQuery.exec((err, result) => {
-    if (err) return next(err);
-    if (!result) return next(404);
-    Product.find()
-      .where("category")
-      .equals(result._id)
-      .deleteMany({}, (error) => {
-        if (error) return next(error);
-      });
-    categoryQuery.clone().deleteOne({}, (lastErr, docs) => {
-      if (lastErr) return next(lastErr);
-      if (!docs) return next(404);
-      res.redirect("/categories");
+exports.category_delete_post = [
+  body("password", "Wrong password").trim().equals("admin123").escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          categories(callback) {
+            Category.find().exec(callback);
+          },
+          category(callback) {
+            Category.findOne({
+              name: { $regex: new RegExp(`^${req.params.catid}$`, "i") },
+            }).exec(callback);
+          },
+        },
+        (err, { categories, category }) => {
+          if (err) return next(err);
+          if (!category) return next(404);
+          res.render("category_delete", {
+            title: `Delete ${category.name}`,
+            category,
+            categories,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    }
+    const categoryQuery = Category.findOne({
+      name: { $regex: new RegExp(`^${req.params.catid}$`, "i") },
     });
-  });
-};
+    categoryQuery.exec((err, result) => {
+      if (err) return next(err);
+      if (!result) return next(404);
+      Product.find()
+        .where("category")
+        .equals(result._id)
+        .deleteMany({}, (error) => {
+          if (error) return next(error);
+        });
+      categoryQuery.clone().deleteOne({}, (lastErr, docs) => {
+        if (lastErr) return next(lastErr);
+        if (!docs) return next(404);
+        res.redirect("/categories");
+      });
+    });
+  },
+];

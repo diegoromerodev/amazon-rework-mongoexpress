@@ -7,6 +7,9 @@
     "devstart": "nodemon ./bin/www",
     "serverstart": "SET DEBUG=amazon-rework-mongoexpress:*,app & npm run devstart"
   },
+  "engines": {
+    "node": "14.15.1"
+  },
   "dependencies": {
     "async": "^3.2.1",
     "cookie-parser": "~1.4.4",

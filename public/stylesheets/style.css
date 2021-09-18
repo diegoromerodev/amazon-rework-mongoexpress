@@ -339,6 +339,7 @@ a.detail-header {
     grid-row-end: span 3;
     width: 100%; }
   .product-detail .avg-rating {
+    margin-top: 10px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -656,6 +657,29 @@ h1.form {
     transform: scale(100%); }
     .delete-info + form > button:hover {
       transform: scale(102%); }
+
+.delete-pass {
+  padding: 20px;
+  border-radius: 5px;
+  margin: 10px 0;
+  background: #333;
+  color: #fafafa;
+  display: flex;
+  align-items: center; }
+  .delete-pass label {
+    font-size: 1.2em;
+    font-weight: 500;
+    font-style: italic; }
+  .delete-pass input[name="password"] {
+    flex-grow: 1;
+    margin-left: 20px;
+    border-radius: 5px;
+    background-color: #eee;
+    max-width: 100%;
+    padding: 5px;
+    font-size: 1.2em;
+    border: 1px solid rgba(17, 17, 17, 0.2);
+    font-family: Karla, sans-serif; }
 
 #footer {
   padding: 20px;

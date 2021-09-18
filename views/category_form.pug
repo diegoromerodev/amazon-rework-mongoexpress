@@ -12,4 +12,8 @@ block content
             .input-section
                 label(for="cat-name") Category name
                 input#cat-name(name="name" value=(name || ""))
+                if admin
+                    .separator
+                    label(for="cat-pass") Admin Password:
+                    input#cat-pass(name="password" value="")
             button(type="submit") Save category

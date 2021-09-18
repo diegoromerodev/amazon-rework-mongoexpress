@@ -132,7 +132,7 @@ exports.product_details_get = (req, res, next) => {
       if (!results) next(404);
       const randomProds = [];
       let i = 0;
-      while (i < 3) {
+      while (i < 6) {
         const item =
           results.allProds[Math.floor(Math.random() * results.allProds.length)];
         if (randomProds.includes(item) || item.name === results.product.name)
@@ -184,6 +184,7 @@ exports.product_update_get = (req, res, next) => {
         product,
         categories,
         brands,
+        admin: true,
       });
     }
   );
@@ -203,6 +204,7 @@ exports.product_update_post = [
     .trim()
     .notEmpty()
     .escape(),
+  body("password", "Wrong password").trim().equals("admin123").escape(),
   checkSchema({
     image: {
       custom: {
@@ -245,6 +247,7 @@ exports.product_update_post = [
             brands: results.allBrands,
             categories: results.allCats,
             product: newProduct,
+            admin: true,
           });
         }
         Product.findByIdAndUpdate(
@@ -287,16 +290,47 @@ exports.product_delete_get = (req, res, next) => {
   );
 };
 
-exports.product_delete_post = (req, res, next) => {
-  Product.findByIdAndDelete(req.params.prodid, (err, docs) => {
-    if (err) return next(err);
-    if (!docs) return next(404);
-  });
-  Review.find()
-    .where("product")
-    .equals(req.params.prodid)
-    .deleteMany({}, (err) => {
-      if (err) return next(404);
-      res.redirect("/");
+exports.product_delete_post = [
+  body("password", "Wrong password").trim().equals("admin123").escape(),
+  // PROCESSING MIDDLEWARE
+  (req, res, next) => {
+    const valErrors = validationResult(req);
+    if (!valErrors.isEmpty()) {
+      async.parallel(
+        {
+          categories(callback) {
+            Category.find().exec(callback);
+          },
+          product(callback) {
+            Product.findById(req.params.prodid)
+              .populate("brand")
+              .populate("category")
+              .exec(callback);
+          },
+        },
+        (err, { categories, product }) => {
+          if (err) return next(err);
+          if (!product) return next(404);
+          res.render("product_delete", {
+            title: `Delete ${product.name}`,
+            product,
+            categories,
+            errors: valErrors.array(),
+          });
+        }
+      );
+      return;
+    }
+    Product.findByIdAndDelete(req.params.prodid, (err, docs) => {
+      if (err) return next(err);
+      if (!docs) return next(404);
     });
-};
+    Review.find()
+      .where("product")
+      .equals(req.params.prodid)
+      .deleteMany({}, (err) => {
+        if (err) return next(404);
+        res.redirect("/");
+      });
+  },
+];

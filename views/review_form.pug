@@ -22,4 +22,8 @@ block content
                 .separator
                 label(for="review-text") Message:
                 input#review-text(name="text" value=(newReview !== undefined ? newReview.text : ""))
+                if admin
+                    .separator
+                    label(for="prod-pass") Admin Password:
+                    input#prod-pass(name="password" value="")
             button(type="submit") Save review

@@ -2,6 +2,11 @@ extends layout
 
 block content
     .container
+        if errors
+                ul.errors
+                    h3.error-header Please fix the following problem#{errors.length>1 ? "s" : ""}:
+                    for error in errors
+                        li= (error.msg || error)
         h1.form Deleting #{product.name}
         .delete-info
             p Date added
@@ -19,5 +24,8 @@ block content
             p Category
             h2= product.category.name
         form(action="" method="post")
+            .delete-pass
+                    label(for="rev-pass") Admin Password:
+                    input#rev-pass(name="password" value="")
             button(type="submit") Delete product and reviews
         

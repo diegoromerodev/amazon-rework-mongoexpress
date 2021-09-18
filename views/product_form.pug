@@ -31,4 +31,8 @@ block content
                 select#categories(name="category")
                     for category in categories
                         option(value=category._id selected=(product && product.category._id.toString() === category._id.toString()))= category.name
+                if admin
+                    .separator
+                    label(for="prod-pass") Admin Password:
+                    input#prod-pass(name="password" value="")
             button(type="submit") Save product

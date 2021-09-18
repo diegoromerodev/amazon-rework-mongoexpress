@@ -100,7 +100,6 @@ exports.review_create_post = [
           image: req.file?.filename,
         });
         const valErrors = validationResult(req);
-        console.log("HUUUUH!!!!", valErrors);
         if (!valErrors.isEmpty()) {
           res.render("review_form", {
             title: "Add a new review for ",
@@ -145,6 +144,7 @@ exports.review_update_get = (req, res, next) => {
         product,
         categories,
         newReview: review,
+        admin: true,
       });
     }
   );
@@ -159,6 +159,7 @@ exports.review_update_post = [
     .escape(),
   body("text", "Message text is mandatory").trim().notEmpty().escape(),
   body("rating", "Please specify a rating").trim().notEmpty().escape(),
+  body("password", "Wrong password").trim().equals("admin123").escape(),
   checkSchema({
     image: {
       custom: {
@@ -195,6 +196,7 @@ exports.review_update_post = [
             product: results.product,
             newReview,
             categories: results.categories,
+            admin: true,
           });
           return;
         }
@@ -203,7 +205,6 @@ exports.review_update_post = [
           newReview,
           {},
           (err, review) => {
-            console.log("UPDAAAAAAAAAAAAAATING");
             if (err) return next(err);
             res.redirect(results.product.url);
           }
@@ -235,10 +236,35 @@ exports.review_delete_get = (req, res, next) => {
   );
 };
 
-exports.review_delete_post = (req, res, next) => {
-  Review.findByIdAndDelete(req.params.reviewid, (err, docs) => {
-    if (err) return next(err);
-    if (!docs) return next(404);
-    res.redirect(`/${req.params.prodid}`);
-  });
-};
+exports.review_delete_post = [
+  body("password", "Wrong password").trim().equals("admin123").escape(),
+  (req, res, next) => {
+    async.parallel(
+      {
+        categories(callback) {
+          Category.find().exec(callback);
+        },
+        review(callback) {
+          Review.findById(req.params.reviewid).exec(callback);
+        },
+      },
+      (err, { review, categories }) => {
+        const valErrors = validationResult(req);
+        if (!valErrors.isEmpty()) {
+          res.render("review_delete", {
+            title: "Delete a review",
+            review,
+            categories,
+            errors: valErrors.array(),
+          });
+          return;
+        }
+        Review.findByIdAndDelete(req.params.reviewid, (error, docs) => {
+          if (error) return next(error);
+          if (!docs) return next(404);
+          res.redirect(`/${req.params.prodid}`);
+        });
+      }
+    );
+  },
+];
