@@ -1,22 +1,25 @@
 extends layout
 
 block content
-    h1= title + product.name
-    .product
-        h3= product.name
-        p= product._id
-    form(method="post" enctype="multipart/form-data" action="")
-        input#review-image(type="hidden" name="review-product" value=product._id)
-        label(for="review-image") Rating:
-        input#review-rating(type="range" name="rating" min="0" max="5" value=(newReview !== undefined ? newReview.rating : "") step="0.5")
-        label(for="review-image") Review image:
-        input#review-image(type="file" name="image" value="")
-        label(for="review-author") Author:
-        input#review-author(name="author" value=(newReview !== undefined ? newReview.author : ""))
-        label(for="review-text") Message:
-        input#review-text(name="text" value=(newReview !== undefined ? newReview.text : ""))
-        button(type="submit") Save review
-    if errors
-        ul
-            for error in errors
-                li= (error.msg || error)
+    .container
+        if errors
+            ul.errors
+                h3.error-header Please fix the following problem#{errors.length>1 ? "s" : ""}:
+                for error in errors
+                    li= (error.msg || error)
+        h1.form= title + product.name
+        form(method="post" enctype="multipart/form-data" action="")
+            .input-section
+                input#review-image(type="hidden" name="review-product" value=product._id)
+                label(for="review-image") Rating:
+                input#review-rating.rating.rating--nojs(name="rating" max="5" type="range" value=(newReview !== undefined ? newReview.rating : "") step="0.5")
+                .separator
+                label(for="review-image") Review image:
+                input#review-image(type="file" name="image" value="")
+                .separator
+                label(for="review-author") Author:
+                input#review-author(name="author" value=(newReview !== undefined ? newReview.author : ""))
+                .separator
+                label(for="review-text") Message:
+                input#review-text(name="text" value=(newReview !== undefined ? newReview.text : ""))
+            button(type="submit") Save review

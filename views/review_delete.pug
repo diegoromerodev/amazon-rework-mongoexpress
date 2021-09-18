@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    .container
+        h1.form Deleting #{review.author}'s review
+        .delete-info
+            p Rating
+            h2= review.rating
+            .separator
+            p Author
+            h2= review.author
+            .separator
+            p Review
+            h2= review.text
+        form(action="" method="post")
+            button(type="submit") Delete review
+        

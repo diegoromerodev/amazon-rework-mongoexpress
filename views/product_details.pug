@@ -8,6 +8,9 @@ block content
                 a(href=product.brand.url) 
                     img(src="/uploads/logos/" + product.brand.logo)
                 h1= product.name
+                a.avg-rating(href="#prod-reviews")
+                    input.rating(max="5" type="range" step="0.5" readonly=true style="--fillbg:#999; --value:"+ (stats.numOfReviews ? (stats.total/stats.numOfReviews) : 0))
+                    h4 (#{stats.numOfReviews})
                 .buy-buttons
                     h3= product.price
                     h3.stock Out of stock
@@ -18,8 +21,27 @@ block content
                         img(src="/images/edit.svg")
                     a.delete(href=product.url + "/delete")
                         img(src="/images/trash.svg")
+                h4 Category
+                a.prod-cat(href=product.category.url)= product.category.name
                 h4 Description
                 p= product.description
+        .cta-review
+            h3 Have it?
+            a(href=product.url + "/review") Leave a review
+        #prod-reviews
+            for review in reviews
+                .ind-review
+                    img(src="/uploads/reviews/" + review.image)
+                    .review-wrapper
+                        .review-head
+                            h4= review.author
+                            input.rating(max="5" type="range" step="0.5" readonly=true style="--value:"+review.rating)
+                            .actions
+                                a.edit(href=product.url + "/" + review._id + "/update")
+                                    img(src="/images/edit.svg")
+                                a.delete(href=product.url + "/" + review._id + "/delete")
+                                    img(src="/images/trash.svg")
+                        p= review.text
         h2 Check out these other products:
         .product-grid
             for prod in products

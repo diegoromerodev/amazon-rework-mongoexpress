@@ -1,26 +1,34 @@
 extends layout
 
 block content
-    h1= title
-    form(method="post" enctype="multipart/form-data" action="")
-        label(for="product-image") Product image:
-        input#product-image(type="file" name="image" value="")
-        label(for="product-name") Product name:
-        input#product-name(name="name" value=(product !== undefined ? product.name : ""))
-        label(for="product-description") Description:
-        input#product-description(name="description" value=(product !== undefined ? product.description : ""))
-        label(for="product-price") Price:
-        input#product-price(name="price" value=(product !== undefined ? product.price : ""))
-        label(for="brands") Brand:
-        select#brands(name="brand")
-            for brand in brands
-                option(value=brand._id)= brand.name
-        label(for="categories") Category:
-        select#categories(name="category")
-            for category in categories
-                option(value=category._id)= category.name
-        button(type="submit") Save product
-    if errors
-        ul
-            for error in errors
-                li= (error.msg || error)
+    .container
+        if errors
+            ul.errors
+                h3.error-header Please fix the following problem#{errors.length>1 ? "s" : ""}:
+                for error in errors
+                    li= (error.msg || error)
+        h1.form= title
+        form(method="post" enctype="multipart/form-data" action="")
+            .input-section
+                label(for="product-image") Product image:
+                input#product-image(type="file" name="image" value="")
+                .separator
+                label(for="product-name") Product name:
+                input#product-name(name="name" value=(product !== undefined ? product.name : ""))
+                .separator
+                label(for="product-description") Description:
+                input#product-description(name="description" value=(product !== undefined ? product.description : ""))
+                .separator
+                label(for="product-price") Price:
+                input#product-price(name="price" value=(product !== undefined ? product.price : ""))
+                .separator
+                label(for="brands") Brand:
+                select#brands(name="brand")
+                    for brand in brands
+                        option(value=brand._id selected=(product && product.brand._id.toString() === brand._id.toString()))= brand.name
+                .separator
+                label(for="categories") Category:
+                select#categories(name="category")
+                    for category in categories
+                        option(value=category._id selected=(product && product.category._id.toString() === category._id.toString()))= category.name
+            button(type="submit") Save product

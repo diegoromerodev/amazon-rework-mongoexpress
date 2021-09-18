@@ -9,20 +9,12 @@ router.post("/create", categoryController.category_create_post);
 
 router.get("/:catid", categoryController.category_details);
 
-router.get("/:catid/update", (req, res) => {
-  res.send(`NOT IMPLEMENTED CATEGORY UPDATE GET ID: ${req.params.catid}`);
-});
+router.get("/:catid/update", categoryController.category_update_get);
 
-router.post("/:catid/update", (req, res) => {
-  res.send(`NOT IMPLEMENTED CATEGORY UPDATE POST ID: ${req.params.catid}`);
-});
+router.post("/:catid/update", categoryController.category_update_post);
 
-router.get("/:catid/delete", (req, res) => {
-  res.send(`NOT IMPLEMENTED CATEGORY DELETE GET ID: ${req.params.catid}`);
-});
+router.get("/:catid/delete", categoryController.category_delete_get);
 
-router.post("/:catid/delete", (req, res) => {
-  res.send(`NOT IMPLEMENTED CATEGORY DELETE POST ID: ${req.params.catid}`);
-});
+router.post("/:catid/delete", categoryController.category_delete_post);
 
 module.exports = router;

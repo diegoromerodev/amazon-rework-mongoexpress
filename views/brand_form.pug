@@ -1,14 +1,18 @@
 extends layout
 
 block content
-    h1= title
-    form(method="post" enctype="multipart/form-data" action="")
-        label(for="brand-logo") Brand logo:
-        input#brand-name(type="file" name="logo" value="")
-        label(for="brand-name") Brand name:
-        input#brand-name(name="name" value=(name !== undefined ? name : ""))
-        button(type="submit") Save brand
-    if errors
-        ul
-            for error in errors
-                li= (error.msg || error)
+    .container
+        if errors
+            ul.errors
+                h3.error-header Please fix the following problem#{errors.length>1 ? "s" : ""}:
+                for error in errors
+                    li= (error.msg || error)
+        h1.form= title
+        form(method="post" enctype="multipart/form-data" action="")
+            .input-section
+                label(for="brand-logo") Brand logo:
+                input#brand-name(type="file" name="logo" value="")
+                .separator
+                label(for="brand-name") Brand name:
+                input#brand-name(name="name" value=(name !== undefined ? name : ""))
+            button(type="submit") Save brand

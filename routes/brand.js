@@ -9,20 +9,12 @@ router.post("/create", brandController.brand_create_post);
 
 router.get("/:brandid", brandController.brand_details);
 
-router.get("/:brandid/update", (req, res) => {
-  res.send(`NOT IMPLEMENTED BRAND UPDATE GET ID: ${req.params.brandid}`);
-});
+router.get("/:brandid/update", brandController.brand_update_get);
 
-router.post("/:brandid/update", (req, res) => {
-  res.send(`NOT IMPLEMENTED BRAND UPDATE POST ID: ${req.params.brandid}`);
-});
+router.post("/:brandid/update", brandController.brand_update_post);
 
-router.get("/:brandid/delete", (req, res) => {
-  res.send(`NOT IMPLEMENTED BRAND DELETE GET ID: ${req.params.brandid}`);
-});
+router.get("/:brandid/delete", brandController.brand_delete_get);
 
-router.post("/:brandid/delete", (req, res) => {
-  res.send(`NOT IMPLEMENTED BRAND DELETE POST ID: ${req.params.brandid}`);
-});
+router.post("/:brandid/delete", brandController.brand_delete_post);
 
 module.exports = router;

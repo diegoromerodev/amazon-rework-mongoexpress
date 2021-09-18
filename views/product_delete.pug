@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    .container
+        h1.form Deleting #{product.name}
+        .delete-info
+            p Date added
+            h2= product.formatted_date
+            .separator
+            p Brand
+            h2= product.brand.name
+            .separator
+            p Name
+            h2= product.name
+            .separator
+            p Description
+            h2= product.description
+            .separator
+            p Category
+            h2= product.category.name
+        form(action="" method="post")
+            button(type="submit") Delete product and reviews
+        

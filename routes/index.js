@@ -7,6 +7,18 @@ const productController = require("../controllers/productController");
 const router = express.Router();
 
 /* GET home page. */
+router.get("/:prodid/review", reviewController.review_create_get);
+
+router.post("/:prodid/review", reviewController.review_create_post);
+
+router.get("/:prodid/:reviewid/update", reviewController.review_update_get);
+
+router.post("/:prodid/:reviewid/update", reviewController.review_update_post);
+
+router.get("/:prodid/:reviewid/delete", reviewController.review_delete_get);
+
+router.post("/:prodid/:reviewid/delete", reviewController.review_delete_post);
+
 router.get("/", require("../controllers/indexController").index_get);
 
 router.get("/search", require("../controllers/indexController").search_get);
@@ -21,48 +33,12 @@ router.post("/create", productController.product_create_post);
 
 router.get("/:prodid", productController.product_details_get);
 
-router.get("/:prodid/update", (req, res) => {
-  res.send(`NOT IMPLEMENTED PRODUCT UPDATE GET ID: ${req.params.prodid}`);
-});
+router.get("/:prodid/update", productController.product_update_get);
 
-router.post("/:prodid/update", (req, res) => {
-  res.send(`NOT IMPLEMENTED PRODUCT UPDATE POST ID: ${req.params.prodid}`);
-});
+router.post("/:prodid/update", productController.product_update_post);
 
-router.get("/:prodid/delete", (req, res) => {
-  res.send(`NOT IMPLEMENTED PRODUCT DELETE GET ID: ${req.params.prodid}`);
-});
+router.get("/:prodid/delete", productController.product_delete_get);
 
-router.post("/:prodid/delete", (req, res) => {
-  res.send(`NOT IMPLEMENTED PRODUCT DELETE POST ID: ${req.params.prodid}`);
-});
-
-router.get("/:prodid/review", reviewController.review_create_get);
-
-router.post("/:prodid/review", reviewController.review_create_post);
-
-router.get("/:prodid/:reviewid/update", (req, res) => {
-  res.send(
-    `NOT IMPLEMENTED PRODUCT REVIEW UPDATE GET ID: ${req.params.prodid}`
-  );
-});
-
-router.post("/:prodid/:reviewid/update", (req, res) => {
-  res.send(
-    `NOT IMPLEMENTED PRODUCT REVIEW UPDATE POST ID: ${req.params.prodid}`
-  );
-});
-
-router.get("/:prodid/:reviewid/delete", (req, res) => {
-  res.send(
-    `NOT IMPLEMENTED PRODUCT REVIEW DELETE GET ID: ${req.params.prodid}`
-  );
-});
-
-router.post("/:prodid/:reviewid/delete", (req, res) => {
-  res.send(
-    `NOT IMPLEMENTED PRODUCT REVIEW DELETE POST ID: ${req.params.prodid}`
-  );
-});
+router.post("/:prodid/delete", productController.product_delete_post);
 
 module.exports = router;

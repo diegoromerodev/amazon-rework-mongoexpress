@@ -29,9 +29,10 @@ exports.category_create_post = [
           categories,
         });
       });
+      return;
     }
     // VALIDATION SUCCESSFUL
-    return Category.findOne({
+    Category.findOne({
       name: { $regex: new RegExp(req.body.name, "i") },
     }).exec((err, catDuplicate) => {
       if (err) {
@@ -93,4 +94,116 @@ exports.category_details = (req, res, next) => {
         });
     }
   );
+};
+
+exports.category_update_get = (req, res, next) => {
+  async.parallel(
+    {
+      categories(callback) {
+        Category.find().exec(callback);
+      },
+      category(callback) {
+        Category.findOne({
+          name: { $regex: new RegExp(req.params.catid, "i") },
+        }).exec(callback);
+      },
+    },
+    (err, { categories, category }) => {
+      if (err) return next(err);
+      if (!categories || !category) return next(404);
+      res.render("category_form", {
+        title: "Edit category",
+        name: category.name,
+        categories,
+      });
+    }
+  );
+};
+
+exports.category_update_post = [
+  body("name", "Must specify a category name").trim().notEmpty().escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      Category.find().exec((err, categories) => {
+        if (err) return next(err);
+        if (!categories) return next(404);
+        res.render("category_form", {
+          title: "Edit category",
+          name: req.body.name,
+          errors: errors.array(),
+          categories,
+        });
+      });
+      return;
+    }
+    // VALIDATION SUCCESSFUL
+    Category.findOne({
+      name: { $regex: new RegExp(req.body.name, "i") },
+    }).exec((err, catDuplicate) => {
+      if (err) {
+        return next(err);
+      }
+      if (catDuplicate)
+        return res.redirect(`/category/${catDuplicate.name.toLowerCase()}`);
+      // NO DUPES
+      const newCat = { name: req.body.name };
+      Category.findOneAndUpdate(
+        {
+          name: { $regex: new RegExp(req.params.catid, "i") },
+        },
+        newCat,
+        {},
+        (error, cat) => {
+          if (error) return next(error);
+          res.redirect("/categories");
+        }
+      );
+    });
+  },
+];
+
+exports.category_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      categories(callback) {
+        Category.find().exec(callback);
+      },
+      category(callback) {
+        Category.findOne({
+          name: { $regex: new RegExp(`^${req.params.catid}$`, "i") },
+        }).exec(callback);
+      },
+    },
+    (err, { categories, category }) => {
+      if (err) return next(err);
+      if (!category) return next(404);
+      res.render("category_delete", {
+        title: `Delete ${category.name}`,
+        category,
+        categories,
+      });
+    }
+  );
+};
+
+exports.category_delete_post = (req, res, next) => {
+  const categoryQuery = Category.findOne({
+    name: { $regex: new RegExp(`^${req.params.catid}$`, "i") },
+  });
+  categoryQuery.exec((err, result) => {
+    if (err) return next(err);
+    if (!result) return next(404);
+    Product.find()
+      .where("category")
+      .equals(result._id)
+      .deleteMany({}, (error) => {
+        if (error) return next(error);
+      });
+    categoryQuery.clone().deleteOne({}, (lastErr, docs) => {
+      if (lastErr) return next(lastErr);
+      if (!docs) return next(404);
+      res.redirect("/categories");
+    });
+  });
 };
