@@ -1,8 +1,8 @@
-## Amazon Flat Rework
+# Amazon Flat Rework
 
 ![AMZ](https://user-images.githubusercontent.com/74877521/161289191-18eb4ac8-12b8-4b92-a128-92cc114ceb8b.png)
 
-# Features
+## Features
 <ul>
     <li>Working search engine</li>
     <li>Working brand catalog</li>
